@@ -1,0 +1,61 @@
+#!/usr/bin/sh
+
+TEMP_DIR="$(mktemp -d /tmp/megane-build.XXXXXX)"
+
+s_exit() {
+	rm -rf "$TEMP_DIR"
+	exit $1
+}
+
+VERSION=""
+PROJECT_NAME=""
+
+if [ ! -e ".megane-build" ]; then
+	if [ $# -eq 0 ]; then
+		echo "Needs a version argument"
+		s_exit 1
+	else
+		if [ $# -eq 1 ]; then
+			echo "Needs a project name argument"
+			s_exit 1
+		fi
+
+		VERSION="$1"
+		PROJECT_NAME="$2"
+	fi
+else
+	VERSION="$(sed -n '1p' < .megane-build)"
+	PROJECT_NAME="$(sed -n '2p' < .megane-build)"
+fi
+
+
+BUILD_DIR="${TEMP_DIR}/build"
+
+git clone --depth 1 "https://github.com/megane-modules/build.git" "${BUILD_DIR}"
+
+if [ ! -d "${BUILD_DIR}/version/${VERSION}" ]; then
+	echo "Invalid version, available versions:"
+	ls "${BUILD_DIR}/version"
+	s_exit 1
+fi
+
+echo
+echo "Copying base"
+rsync -av "${BUILD_DIR}/base/" .
+
+echo
+echo "Copying version ${VERSION}"
+rsync -av "${BUILD_DIR}/version/${VERSION}/" .
+
+echo
+echo "Copying gitignore"
+rsync -av "${BUILD_DIR}/gitignore/" .
+
+echo
+echo "Saving build config"
+printf "$VERSION\n$PROJECT_NAME\n" > ".megane-build"
+printf "\nrootProject.name=\"megane-${PROJECT_NAME}\"\n" >> "settings.gradle"
+
+echo "Done."
+
+s_exit 0
