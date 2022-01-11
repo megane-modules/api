@@ -5,6 +5,7 @@ import lol.bai.megane.api.provider.EnergyProvider;
 import lol.bai.megane.api.provider.FluidProvider;
 import lol.bai.megane.api.provider.ItemProvider;
 import lol.bai.megane.api.provider.ProgressProvider;
+import net.minecraft.block.Block;
 
 public interface CommonRegistrar {
 
@@ -21,6 +22,8 @@ public interface CommonRegistrar {
     default <T> void addFluid(Class<T> clazz, FluidProvider<T> provider) {
         addFluid(DEFAULT_PRIORITY, clazz, provider);
     }
+
+    void addCauldron(Block block, CauldronProvider provider);
 
     <T> void addCauldron(int priority, Class<T> clazz, CauldronProvider provider);
 
