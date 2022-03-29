@@ -15,6 +15,7 @@ dependencies {
     modRuntimeOnly "lol.bai.megane:megane-vanilla:${meganeVanillaVersion}"
 }
 ```
+Check megane module versions in one of the release in the bundler repository [here](https://github.com/badasintended/megane/releases).
 
 ### Create some provider, for example an `EnergyProvider`:
 ```java
