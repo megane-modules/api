@@ -41,20 +41,27 @@ fi
 
 echo
 echo "Copying base"
-rsync -av "${BUILD_DIR}/base/" .
+cp -R "${BUILD_DIR}/base/." .
 
 echo
 echo "Copying version ${VERSION}"
-rsync -av "${BUILD_DIR}/version/${VERSION}/" .
+cp -R "${BUILD_DIR}/version/${VERSION}/." .
 
 echo
 echo "Copying gitignore"
-rsync -av "${BUILD_DIR}/gitignore/" .
+cp -R "${BUILD_DIR}/gitignore/." .
 
 echo
 echo "Saving build config"
 printf "$VERSION\n$PROJECT_NAME\n" > ".megane-build"
 printf "\nrootProject.name=\"megane-${PROJECT_NAME}\"\n" >> "settings.gradle"
+
+if [ -e "setup_extra" ]; then
+	echo
+	echo "Found setup_extra file, running that"
+	chmod +x setup_extra
+	./setup_extra
+fi
 
 echo "Done."
 
