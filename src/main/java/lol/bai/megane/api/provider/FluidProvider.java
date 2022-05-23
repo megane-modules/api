@@ -1,6 +1,7 @@
 package lol.bai.megane.api.provider;
 
 import net.minecraft.fluid.Fluid;
+import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class FluidProvider<T> extends AbstractProvider<T> {
@@ -13,6 +14,11 @@ public abstract class FluidProvider<T> extends AbstractProvider<T> {
 
     @Nullable
     public abstract Fluid getFluid(int slot);
+
+    @Nullable
+    public NbtCompound getNbt(int slot) {
+        return null;
+    }
 
     /**
      * @return stored fluid in slot, in millibuckets.
